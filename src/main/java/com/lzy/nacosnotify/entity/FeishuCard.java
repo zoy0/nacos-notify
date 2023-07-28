@@ -70,6 +70,10 @@ public class FeishuCard {
         return feishuCard;
     }
 
+    public void setHeader(String header){
+        this.card.header.title.content = header;
+    }
+
     public void setCardHeaderColor(String color){
         this.card.header.template=color;
     }
