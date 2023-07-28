@@ -1,0 +1,26 @@
+server:
+  port: 9052
+# Spring
+spring:
+  application:
+    name: nacos-notify
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: xxx:8848
+        # 命名空间
+        namespace: xxx
+
+# 以下配置可以放到nacos上面
+# 服务监控
+monitor:
+  # 是否开启提醒
+  enabled: true
+  # 服务监控列表
+  services: a-service,b-service
+
+feishu:
+  webhookUrl: https://open.feishu.cn/open-apis/bot/v2/hook/xxx
+
+
