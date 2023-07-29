@@ -68,7 +68,7 @@ public class ServiceStatusListener implements InitializingBean {
                 if(instances.size() <cache.get(serviceName)) {
                     log.info(serviceName +"服务下线,"+"服务异常下线告警,当前节点数："+instances.size());
                     if (config.getEnabled()) {
-                        FeishuCard feishuCard = new FeishuCard().generateCard("服务下线", serviceName + "服务下线," + "服务异常下线告警,当前节点数：" + instances.size());
+                        FeishuCard feishuCard = new FeishuCard().generateCard("服务下线", serviceName + "服务下线," + "服务异常下线告警,当前节点数：" + instances.size()+"\n<at id=all></at> ");
                         feishuCard.setCardHeaderColor(FeishuCard.RED);
                         feishuService.sendFeishuCard(feishuCard);
                     }
@@ -76,7 +76,7 @@ public class ServiceStatusListener implements InitializingBean {
                 }else if (instances.size() > cache.get(serviceName)){
                     log.info("============服务上线"+ serviceName+",当前节点数量："+instances.size());
                     if (config.getEnabled()) {
-                        FeishuCard feishuCard = new FeishuCard().generateCard("服务上线", serviceName + "已上线,当前节点数量："+instances.size());
+                        FeishuCard feishuCard = new FeishuCard().generateCard("服务上线", serviceName + "已上线,当前节点数量："+instances.size()+"\n<at id=all></at> ");
                         feishuCard.setCardHeaderColor(FeishuCard.GREEN);
                         feishuService.sendFeishuCard(feishuCard);
                     }
