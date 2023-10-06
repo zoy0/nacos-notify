@@ -1,5 +1,7 @@
 package com.lzy.nacosnotify.listener;
 
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import com.alibaba.cloud.nacos.NacosServiceManager;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
@@ -15,6 +17,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,11 +33,12 @@ public class ServiceStatusListener implements InitializingBean {
     @Autowired
     private MonitorConfig config;
 
-    @Value("${spring.cloud.nacos.discovery.server-addr}")
-    private String nacosUrl;
 
-    @Value("${spring.cloud.nacos.discovery.namespace}")
-    private String namespace;
+    @Resource
+    private NacosServiceManager nacosServiceManager;
+
+    @Resource
+    private NacosDiscoveryProperties nacosDiscoveryProperties;
 
     private static Map<String, Integer> cache = new ConcurrentHashMap<>();
 
@@ -51,10 +55,7 @@ public class ServiceStatusListener implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         log.info("afterPropertiesSet........");
-        Properties properties = System.getProperties();
-        properties.setProperty("serverAddr", nacosUrl);
-        properties.setProperty("namespace", namespace);
-        NamingService naming = NamingFactory.createNamingService(properties);
+        NamingService naming = nacosServiceManager.getNamingService(nacosDiscoveryProperties.getNacosProperties());
         List<String> serviceNames = config.getServices();
         log.info("需要监控的服务数:{}", serviceNames.size());
         for (String service : serviceNames) {
